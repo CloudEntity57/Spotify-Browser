@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import { firebase } from './utils/firebase.js';
 import './App.css';
+import Search from './components/Search';
 
 class App extends Component {
+
   render() {
+    let children = this.props.children
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      { children }
       </div>
     );
   }

@@ -17,8 +17,23 @@
 .App-intro {
   font-size: large;
 }
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.results-wrapper{
+  display: flex;
+  justify-content: center;
+}
+.artist-results {
+  list-style: none;
+  text-align: left;
+  width:35vw;
+  max-height:35vh;
+  overflow: scroll;
+}
+.artist-results a{
+  text-decoration: none;
+  color:black;
+}
+.artist-results a li:hover{
+  text-decoration: none;
+  background-color:tomato;
+  color:black;
 }
