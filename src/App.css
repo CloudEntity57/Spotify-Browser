@@ -17,23 +17,38 @@
 .App-intro {
   font-size: large;
 }
+.dropdown-menu{
+  background-color: lightgray;
+  position: absolute;
+  top:0;
+  left:30vw;
+}
 .results-wrapper{
   display: flex;
   justify-content: center;
 }
-.artist-results {
+.artist-searchbar{
+  height:10vh;
+}
+.artist-results,.album-results {
   list-style: none;
   text-align: left;
   width:35vw;
-  max-height:35vh;
+  /*max-height:35vh;*/
   overflow: scroll;
 }
-.artist-results a{
+.artist-results a, .album-results a {
   text-decoration: none;
   color:black;
 }
-.artist-results a li:hover{
+.artist-results a li:hover, .album-results a li:hover{
   text-decoration: none;
   background-color:tomato;
   color:black;
+}
+.album-results{
+
+}
+.tracks{
+  text-align: left;
 }

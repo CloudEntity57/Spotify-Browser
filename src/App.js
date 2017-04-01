@@ -10,6 +10,7 @@ class App extends Component {
     let children = this.props.children
     return (
       <div className="App">
+            <Search />
       { children }
       </div>
     );

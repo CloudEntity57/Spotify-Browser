@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import jQuery from 'jquery';
 import Search from './Search';
+import { hashHistory } from 'react-router';
 
 class Results extends Component{
   constructor(props){
@@ -10,21 +11,73 @@ class Results extends Component{
       comp:''
     }
   }
-  shouldComponentUpdate(){
-    let path = this.props.location.pathname;
+  componentWillMount(){
+    let params = this.props.params;
+    console.log('params: ',params);
+    if(params.hasOwnProperty('name')) {
+      let artistname = params.name;
+      let artistid = params.id;
+      console.log('artist id: ',artistid);
+      let spotify_str = "https://api.spotify.com/v1/artists/"+artistid+"/albums?&limit=50&market=US";
+      // console.log('search string: ',api_top10_search_str);
+      console.log('search string: ',spotify_str);
+      let request = jQuery.ajax({
+        url:spotify_str,
+        method:'GET'
+      });
+      request.done((val)=>{
+        let albums = val.items;
+        console.log('our entire list of choices: ',val);
+        console.log('our list of albums: ',albums);
+        albums = albums.map((val)=>{
+          return(
+            <a href="#" onClick={this.viewAlbum.bind(this)} ><li id={val.id}>{val.name}</li></a>
+          );
+        });
+        console.log('jsx: ',albums);
+        // console.log('this.state.albums: ',this.state.albums);
+        let previous = this.props.location.pathname;
+        console.log('prev: ',previous);
+        let path = '/results/'+params.name+'/'+params.id;
+        // let first = albums[0].props.children;
+        let first = val.items[0].name;
+        // let comp=this.state.comp;
+        console.log('this.state.first: ',this.state.first);
+        console.log('first: ',first);
+        console.log('path: ',path);
+          if((first !== this.state.first)){
+            this.setState({
+              albums:albums,
+              first:first,
+              artist:val.items[0].artists[0].name
+            });
+      };
+    });
+    request.fail(( err) =>{
+      let albums = '';
       this.setState({
-        path:path
+        albums:albums,
+        first:'',
+        artist:albums[0].artists[0].name
+      });
+    });
+  }
+}
+  shouldComponentUpdate(){
+    let first = this.props.location.pathname;
+      this.setState({
+        first:first
       });
     return true;
   }
   componentWillUpdate(){
     let params = this.props.params;
     console.log('params: ',params);
-    if(params) {
+    if(params.hasOwnProperty('name')) {
       let artistname = params.name;
       let artistid = params.id;
       console.log('artist id: ',artistid);
-      let spotify_str = "https://api.spotify.com/v1/artists/"+artistid+"/albums";
+      let spotify_str = "https://api.spotify.com/v1/artists/"+artistid+"/albums?&limit=50&market=US";
       // console.log('search string: ',api_top10_search_str);
       console.log('search string: ',spotify_str);
       let request = jQuery.ajax({
@@ -36,7 +89,7 @@ class Results extends Component{
         console.log('our list of albums: ',albums);
         albums = albums.map((val)=>{
           return(
-            <li>{val.name}</li>
+            <a href="#" onClick={this.viewAlbum.bind(this)} ><li id={val.id}>{val.name}</li></a>
           );
         });
         console.log('jsx: ',albums);
@@ -44,15 +97,17 @@ class Results extends Component{
         let previous = this.props.location.pathname;
         console.log('prev: ',previous);
         let path = '/results/'+params.name+'/'+params.id;
-        let comp = albums[0].props.children;
+        // let first = albums[0].props.children;
+        let first = val.items[0].name;
         // let comp=this.state.comp;
-        console.log('this.state.comp: ',this.state.comp);
-        console.log('comp: ',comp);
+        console.log('this.state.first: ',this.state.first);
+        console.log('first: ',first);
         console.log('path: ',path);
-          if((albums[0].props.children !== this.state.path)){
+          if((first !== this.state.first)){
             this.setState({
               albums:albums,
-              path:comp
+              first:first,
+              artist:val.items[0].artists[0].name
             });
       };
     });
@@ -60,25 +115,38 @@ class Results extends Component{
       let albums = '';
       this.setState({
         albums:albums,
-        path:''
+        first:''
       });
     });
   }
 }
-
+  viewAlbum(e){
+    e.preventDefault();
+    console.log('album clicked: ',e.target.id);
+    let albumid = e.target.id;
+    hashHistory.push('/album/'+albumid);
+    this.refs.albumresults.innerHTML='';
+  }
   render() {
     let params = this.props.params;
-    if(!params.hasOwnProperty('name')){
-      params='';
-    }
     let albums = this.state.albums;
+    let artist = this.state.artist;
+    let results_title = (
+    <h3> Albums by { artist }</h3>
+    )
+    if(!params.hasOwnProperty('name')){
+      albums='';
+    }
+
     return (
-      <div>
-          <Search />
-      Results here:
-      <ul className="album-results">
-        { albums }
-      </ul>
+      <div className="album-component">
+        <div className="results-wrapper">
+
+          <ul ref="albumresults" className="album-results">
+            { results_title }
+            { albums }
+          </ul>
+        </div>
       </div>
     );
   }
