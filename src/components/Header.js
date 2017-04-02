@@ -6,9 +6,12 @@ class Header extends Component{
     return(
       <header className="hidden-xs">
         <div className="wrapper">
-          <div className="site-title">
+          <span className="site-title">
             Search Spotify
-          </div>
+          </span>
+          <span className="site-subtitle">
+            &nbsp; by Josh Foster
+          </span>
         </div>
       </header>
     )

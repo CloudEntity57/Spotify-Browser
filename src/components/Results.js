@@ -138,13 +138,13 @@ componentDidMount(){
     if(!params.hasOwnProperty('name')){
       albums='';
     }
-
+    let image = (this.props.params.id) ? <Image img={this.state.artist}/> : '';
     return (
       <div className="album-component">
         <div className="row">
           <div className="col-sm-6">
-            <Image img={artist}/>
-            
+            {/* <Image img={artist}/> */}
+            { image }
           </div>
           <div className="col-sm-6">
             <ul ref="albumresults" className="album-results">

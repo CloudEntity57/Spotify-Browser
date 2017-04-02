@@ -14,7 +14,7 @@ class Search extends Component{
   searchArtist(e){
     e.preventDefault();
     let artistquery = this.refs.searchbar.value;
-    if(artistquery.length==0){
+    if(artistquery.length==0 && !this.state.name){
       hashHistory.push('/');
     }
     artistquery = artistquery.replace(/ /g,'%20');
@@ -88,17 +88,12 @@ class Search extends Component{
       </ul>
     </div>
     )  : '';
-    // let artistPicUrl = (this.state.clicked) ? this.state.artistPic : '';
-    // let artistpic = (this.state.results && this.state.results.length>0 && this.state.clicked) && this.state.artistId ?
-    // (
-    //   <img className="artist-pic img-responsive" src={artistPicUrl} alt="artist pic" />
-    // ) : '';
     return (
       <div onBlur={this.hideList.bind(this)} className="search">
-        <label for="form">Search for Artists</label>
+        <label for="form">Search for Artists</label><label className="hidden-lg hidden-md hidden-sm float-right mobile-title">Spotify</label>
         <form className="form form-default">
           <div className="artist-searchbar form-group">
-            <input onEnter={this.submit.bind(this)} type="text" ref="searchbar" onKeyUp={this.searchArtist.bind(this)} placeholder="Search for an artist" className="form-control"/>
+            <input onEnter={this.submit.bind(this)} type="text" ref="searchbar" onKeyUp={this.searchArtist.bind(this)} placeholder="Search for an artist" className="main-input form-control"/>
             <div>
               { dropdownmenu }
             </div>
