@@ -16,7 +16,7 @@ ReactDOM.render(
     <Route path = "/" component = { App }>
       <IndexRoute component = { Results } />
       <Route path="/results/:name/:id" component = { Results } />
-      <Route path="/album/:id" component = { Album } />
+      <Route path="/album/:id/:artist" component = { Album } />
     </Route>
   </Router>,
   document.getElementById('root')

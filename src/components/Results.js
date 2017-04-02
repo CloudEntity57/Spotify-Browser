@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import jQuery from 'jquery';
 import Search from './Search';
 import { hashHistory } from 'react-router';
+import Image from './Image';
 
 class Results extends Component{
   constructor(props){
     super(props);
     this.state={
       albums:'',
-      comp:''
+      comp:'',
+      displaying:false
     }
   }
   componentWillMount(){
+
     let params = this.props.params;
     console.log('params: ',params);
     if(params.hasOwnProperty('name')) {
@@ -19,7 +22,6 @@ class Results extends Component{
       let artistid = params.id;
       console.log('artist id: ',artistid);
       let spotify_str = "https://api.spotify.com/v1/artists/"+artistid+"/albums?&limit=50&market=US";
-      // console.log('search string: ',api_top10_search_str);
       console.log('search string: ',spotify_str);
       let request = jQuery.ajax({
         url:spotify_str,
@@ -35,21 +37,17 @@ class Results extends Component{
           );
         });
         console.log('jsx: ',albums);
-        // console.log('this.state.albums: ',this.state.albums);
-        let previous = this.props.location.pathname;
-        console.log('prev: ',previous);
-        let path = '/results/'+params.name+'/'+params.id;
-        // let first = albums[0].props.children;
         let first = val.items[0].name;
-        // let comp=this.state.comp;
         console.log('this.state.first: ',this.state.first);
         console.log('first: ',first);
-        console.log('path: ',path);
           if((first !== this.state.first)){
             this.setState({
               albums:albums,
               first:first,
-              artist:val.items[0].artists[0].name
+              artist:val.items[0].artists[0].name,
+              artistid:params.id,
+              photo: val.items[0].images[0].url,
+              displaying:true
             });
       };
     });
@@ -58,10 +56,20 @@ class Results extends Component{
       this.setState({
         albums:albums,
         first:'',
-        artist:albums[0].artists[0].name
+        artist:albums[0].artists[0].name,
+        displaying:false
       });
     });
+  }else{
+    this.setState({
+      albums:'',
+      displaying:false
+    });
   }
+}
+componentDidMount(){
+  let params=this.props.params;
+  console.log('params: ',params);
 }
   shouldComponentUpdate(){
     let first = this.props.location.pathname;
@@ -70,10 +78,11 @@ class Results extends Component{
       });
     return true;
   }
-  componentWillUpdate(){
+  componentDidUpdate(){
+
     let params = this.props.params;
     console.log('params: ',params);
-    if(params.hasOwnProperty('name')) {
+    if(params.hasOwnProperty('name')){
       let artistname = params.name;
       let artistid = params.id;
       console.log('artist id: ',artistid);
@@ -93,30 +102,19 @@ class Results extends Component{
           );
         });
         console.log('jsx: ',albums);
-        // console.log('this.state.albums: ',this.state.albums);
-        let previous = this.props.location.pathname;
-        console.log('prev: ',previous);
-        let path = '/results/'+params.name+'/'+params.id;
-        // let first = albums[0].props.children;
         let first = val.items[0].name;
-        // let comp=this.state.comp;
         console.log('this.state.first: ',this.state.first);
         console.log('first: ',first);
-        console.log('path: ',path);
           if((first !== this.state.first)){
             this.setState({
               albums:albums,
               first:first,
-              artist:val.items[0].artists[0].name
+              artist:val.items[0].artists[0].name,
+              artistid:params.id,
+              displaying: true,
+              photo: val.items[0].images[0].url
             });
-      };
-    });
-    request.fail(( err) =>{
-      let albums = '';
-      this.setState({
-        albums:albums,
-        first:''
-      });
+          };
     });
   }
 }
@@ -124,28 +122,36 @@ class Results extends Component{
     e.preventDefault();
     console.log('album clicked: ',e.target.id);
     let albumid = e.target.id;
-    hashHistory.push('/album/'+albumid);
+    let artistid = this.state.artistid;
+    hashHistory.push('/album/'+albumid+'/'+artistid);
     this.refs.albumresults.innerHTML='';
   }
   render() {
     let params = this.props.params;
     let albums = this.state.albums;
-    let artist = this.state.artist;
-    let results_title = (
-    <h3> Albums by { artist }</h3>
-    )
+    let imageUrl = (this.state.imageUrl) ? this.state.imageUrl : '';
+    console.log('render pic: ',imageUrl);
+    let artist = (this.state.artist) ? this.state.artist : '';
+    let results_title = (this.state.displaying) ? (
+      <h3> Albums by { artist }</h3>
+    ) : '';
     if(!params.hasOwnProperty('name')){
       albums='';
     }
 
     return (
       <div className="album-component">
-        <div className="results-wrapper">
-
-          <ul ref="albumresults" className="album-results">
-            { results_title }
-            { albums }
-          </ul>
+        <div className="row">
+          <div className="col-sm-6">
+            <Image img={artist}/>
+            
+          </div>
+          <div className="col-sm-6">
+            <ul ref="albumresults" className="album-results">
+              { results_title }
+              { albums }
+            </ul>
+          </div>
         </div>
       </div>
     );

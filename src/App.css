@@ -1,41 +1,45 @@
-.App {
-  text-align: center;
+html, .App{
+  background-color: grey;
 }
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+header{
+  height:8vh;
+  background-color: black;
 }
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.wrapper{
+  margin:0px 20px;
 }
-
-.App-intro {
-  font-size: large;
+.site-title{
+  font-size: 3em;
+  color:gray;
+}
+label{
+  text-align: left;
+}
+.search{
+  background-color: black;
+  padding:20px;
 }
 .dropdown-menu{
   background-color: lightgray;
-  position: absolute;
-  top:0;
-  left:30vw;
+  position: relative;
+  width:100%;
 }
 .results-wrapper{
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 }
+/*.artist-pic-component{
+}*/
 .artist-searchbar{
-  height:10vh;
+  height:5vh;
 }
-.artist-results,.album-results {
+.artist-results,.album-results{
   list-style: none;
   text-align: left;
-  width:35vw;
-  /*max-height:35vh;*/
+  max-height:90vh;
   overflow: scroll;
+  width:100%;
+  padding:0px 5px;
 }
 .artist-results a, .album-results a {
   text-decoration: none;
@@ -46,9 +50,43 @@
   background-color:tomato;
   color:black;
 }
-.album-results{
-
+.album-toggle{
+  display: flex;
+  justify-content: space-around;
+}
+.fa-arrow-left, .fa-arrow-right{
+  line-height: 45vh;
+  font-size: 2em;
+}
+.album-arrow, .album-arrow div{
+  text-decoration: none;
+  color:black;
+}
+.album-arrow:hover{
+  text-decoration: none;
+  color:azure;
+}
+.album-info{
+  width:100%;
+  padding:0px 5px;
+  margin-top:10px;
+}
+.album-info div{
+  text-align: center;
+}
+.album-info ol{
+  padding-left:0px;
 }
 .tracks{
   text-align: left;
+}
+.track{
+  display:flex;
+  justify-content:space-between;
+}
+@media(max-width:850px){
+  .artist-pic{
+    height:25vh;
+    float:left;
+  }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import jQuery from 'jquery';
+import jquery from 'jquery';
 import { hashHistory } from 'react-router';
 
 class Search extends Component{
@@ -14,16 +14,20 @@ class Search extends Component{
   searchArtist(e){
     e.preventDefault();
     let artistquery = this.refs.searchbar.value;
+    if(artistquery.length==0){
+      hashHistory.push('/');
+    }
     artistquery = artistquery.replace(/ /g,'%20');
     let spotify_str = "https://api.spotify.com/v1/search/?q="+artistquery+"*&type=artist";
     // console.log('search string: ',api_top10_search_str);
     console.log('search string: ',spotify_str);
     let album_art;
     let pic;
-    jQuery.ajax({
+    jquery.ajax({
       url:spotify_str,
       success:(val)=>{
       // var output = JSON.parse(val);
+      console.log('artists: ',val.artists.items);
       let results = val.artists.items.map((artist)=>{
         return {
           name:artist.name,
@@ -46,13 +50,18 @@ class Search extends Component{
   handleClick(e){
     e.preventDefault();
     let result = e.target.textContent.toLowerCase();
-    let resultid = e.target.id
-    console.log('handled id: ',resultid);
-    console.log('handled result: ',result);
+    let resultid = e.target.id;
+    let spotify_str = "https://api.spotify.com/v1/search/?q="+result+"*&type=artist";
+    let pic = jquery.get(
+    spotify_str,(val)=>{
+      let artistphoto = (val.artists.items[0].images[0]) ? val.artists.items[0].images[0].url : '';
     this.setState({
-      clicked:true
+      clicked:true,
+      artistId:resultid,
+      artistPic:artistphoto
     });
     hashHistory.push('/results/'+result+'/'+resultid);
+  });
   }
   submit(e){
     e.preventDefault();
@@ -73,21 +82,30 @@ class Search extends Component{
     })
     : '';
     let dropdownmenu= (this.state.results && this.state.results.length>0 && !this.state.clicked) ?
-    ( <div ref="dropdownmenu" className="dropdown-menu results-wrapper">
+    (<div ref="dropdownmenu" className="dropdown-menu results-wrapper">
       <ul ref="artistresults" className="artist-results">
         { results }
       </ul>
     </div>
-    )
-      : '';
+    )  : '';
+    // let artistPicUrl = (this.state.clicked) ? this.state.artistPic : '';
+    // let artistpic = (this.state.results && this.state.results.length>0 && this.state.clicked) && this.state.artistId ?
+    // (
+    //   <img className="artist-pic img-responsive" src={artistPicUrl} alt="artist pic" />
+    // ) : '';
     return (
-      <div onBlur={this.hideList.bind(this)} className="App">
-        Search for Albums
+      <div onBlur={this.hideList.bind(this)} className="search">
+        <label for="form">Search for Artists</label>
         <form className="form form-default">
           <div className="artist-searchbar form-group">
             <input onEnter={this.submit.bind(this)} type="text" ref="searchbar" onKeyUp={this.searchArtist.bind(this)} placeholder="Search for an artist" className="form-control"/>
+            <div>
+              { dropdownmenu }
+            </div>
           </div>
-          { dropdownmenu }
+          <div>
+        </div>
+          {/* {artistpic} */}
         </form>
       </div>
     );
