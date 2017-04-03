@@ -95,7 +95,7 @@ label{
   border-radius: 2.5px;
 }
 .album-results a li {
-  padding-left: 0px;
+  padding-left: 10px;
   border-radius: 2.5px;
 }
 .album-results a li:hover{
