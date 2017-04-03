@@ -1,16 +1,38 @@
 html, .App{
   background-color: grey;
+  padding-bottom:50px;
 }
 header{
   height:8vh;
   background-color: black;
 }
+.welcome-message{
+  position: absolute;
+  top:35%;
+  margin:10vw;
+  font-size: 2em;
+  text-align: center;
+}
+.search label:nth-child(1), .welcome-message{
+  color: #5f4949;
+}
 .wrapper{
   margin:0px 20px;
+}
+.main-app{
+  width:97vw;
 }
 .site-title{
   font-size: 3em;
   color:grey;
+}
+.site-title a, .site-title a:hover{
+  font-size: inherit;
+  color:inherit;
+  text-decoration: none;
+}
+.site-title a:hover{
+  color:lightgrey;
 }
 .site-subtitle{
   color:#d49d93;
@@ -27,25 +49,33 @@ label{
   background-color: black;
   padding:20px;
 }
+.search-clearfix{
+  position:absolute;
+  width:96vw;
+  top:10vh;
+}
+.space-fill{
+  height:0px;
+}
 .main-input{
   background: url("https://d30y9cdsu7xlg0.cloudfront.net/png/27269-200.png") no-repeat;
   padding-left:35px;
   background-size: contain;
   background-color: white;
 }
+
 .dropdown-menu{
   background-color: lightgray;
   position: relative;
-  width:100%;
-}
-.results-wrapper{
   display: flex;
+  width:100%;
   justify-content: space-around;
 }
 /*.artist-pic-component{
 }*/
 .artist-searchbar{
   height:5vh;
+  overflow:visible;
 }
 .artist-results,.album-results{
   list-style: none;
@@ -54,13 +84,18 @@ label{
   overflow: scroll;
   width:100%;
   padding:0px 5px;
+  margin-left:20px;
 }
 .artist-results a, .album-results a {
   text-decoration: none;
   color:black;
 }
-.artist-results a li, .album-results a li {
+.artist-results a li{
   padding-left: 10px;
+  border-radius: 2.5px;
+}
+.album-results a li {
+  padding-left: 0px;
   border-radius: 2.5px;
 }
 .album-results a li:hover{
@@ -84,8 +119,11 @@ label{
 .fa-arrow-left:hover, .fa-arrow-right:hover{
   color:#d49d93;
 }
-.album-component{
+.absolute{
+  position: fixed;
+  top:25vh;
 }
+
 .album-arrow, .album-arrow div{
   text-decoration: none;
   color:black;
@@ -108,8 +146,15 @@ label{
 .tracks{
   text-align: left;
 }
+audio{
+  display:none;
+  width:100px;
+  background-color:lightgrey;
+  float:left;
+}
 .track{
   display:flex;
+  height:35px;
   justify-content:space-between;
   border-bottom: 1px solid #797373;
 }
@@ -117,6 +162,23 @@ label{
   .artist-pic{
     height:25vh;
     float:left;
+  }
+  .album-info{
+    margin-left:5vw;
+  }
+  .main-input{
+    width:90vw;
+  }
+  .search-clearfix{
+    width:90vw;
+  }
+}
+@media(max-width:825px){
+  .space-fill{
+    height:8vh;
+  }
+  header{
+    display: none;
   }
 }
 @media(min-width:992px){

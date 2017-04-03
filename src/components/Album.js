@@ -10,6 +10,7 @@ class Album extends Component{
     }
   }
   componentWillMount(){
+    console.log('will mount');
     let params = this.props.params;
     console.log('album in component: ',params.id);
     console.log('mounting');
@@ -44,6 +45,11 @@ class Album extends Component{
     });
     req.done((val)=>{
       let albums = val.items;
+      albums = albums.filter((val)=>{
+        if(val.album_type == "album"){
+          return val;
+        }
+      });
       console.log('our list of albums: ',albums);
       let first = val.items[0].name;
       console.log('this.state.first: ',this.state.first);
@@ -87,11 +93,28 @@ class Album extends Component{
     let id = newAlbum.id;
     this.showAlbum(id);
   }
+  showTrack(e){
+    e.preventDefault();
+    let $allTracks = jQuery(".preview-track");
+    jQuery.each($allTracks, (index,val)=>{val.pause()});
+    // $allTracks[0].pause();
+    $allTracks.hide(400);
+    // console.log('target: ',e.target.id);
+    let id = e.target.id;
+    let $audio = jQuery("#"+id).siblings('audio');
+    console.log('audio: ',$audio);
+    $audio.show(400);
+  }
+  // hideTracks(e){
+  //   e.preventDefault();
+  //   let $allTracks = jQuery(".preview-track");
+  //   $allTracks.hide(400);
+  // }
   render(){
-    let title,artist,url,tracks,year,length;
+    let title,artist,url,tracks,year,length,audio;
     let album = this.state.album;
     console.log('album in render: ',album);
-    if(album.hasOwnProperty('name')){
+    if(album.hasOwnProperty('name') && album.album_type=='album'){
       title= album.name;
       artist = album.artists[0].name;
       year = album.release_date.slice(0,4);
@@ -99,8 +122,21 @@ class Album extends Component{
       url = album.images[1].url;
       tracks = album.tracks.items.map((val)=>{
         let track_length = moment(val.duration_ms).format("m:ss");
+        audio=val.preview_url;
+        // console.log('track: ',audio);
         return(
-          <li className="track"><span>{ val.name }</span><span>{track_length}</span></li>
+          // <li className="track"><span>{ val.name }</span><span>{track_length}</span></li>
+          <li className="track">
+            <span>
+              <div id={val.id} onClick={this.showTrack.bind(this)} className="fa fa-play-circle-o">&nbsp;</div>
+                <audio className="preview-track" controls src={audio}>
+                </audio>
+               { val.name }
+
+            </span>
+
+          <span>{track_length}</span></li>
+
         );
       });
     }

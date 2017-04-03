@@ -35,6 +35,7 @@ class Search extends Component{
         }
       });
       console.log('our list of artists: ',results);
+
       this.setState({
         results:results,
         clicked:false
@@ -63,15 +64,16 @@ class Search extends Component{
     hashHistory.push('/results/'+result+'/'+resultid);
   });
   }
+
   submit(e){
     e.preventDefault();
     console.log('submit');
   }
   hideList(){
     console.log('hiding');
-    // this.setState({
-    //   clicked:true
-    // });
+    this.setState({
+      clicked:true
+    });
   }
   render() {
     let results = (this.state.results && !this.state.clicked) ?
@@ -82,19 +84,31 @@ class Search extends Component{
     })
     : '';
     let dropdownmenu= (this.state.results && this.state.results.length>0 && !this.state.clicked) ?
-    (<div ref="dropdownmenu" className="dropdown-menu results-wrapper">
+    (<div ref="dropdownmenu" className="dropdown-menu">
       <ul ref="artistresults" className="artist-results">
         { results }
       </ul>
     </div>
     )  : '';
     return (
-      <div onBlur={this.hideList.bind(this)} className="search">
+      <div>
+      <header onClick={this.hideList.bind(this)} className="hidden-xs">
+        <div className="wrapper">
+          <span className="site-title">
+            <a href="#">Search Spotify</a>
+          </span>
+          <span className="site-subtitle">
+            &nbsp; by Josh Foster
+          </span>
+        </div>
+      </header>
+      <div className="search">
         <label for="form">Search for Artists</label><label className="hidden-lg hidden-md hidden-sm float-right mobile-title">Spotify</label>
-        <form className="form form-default">
+        <div className="space-fill"></div>
+        <form onSubmit={this.submit.bind(this)} className="search-clearfix form form-default">
           <div className="artist-searchbar form-group">
             <input onEnter={this.submit.bind(this)} type="text" ref="searchbar" onKeyUp={this.searchArtist.bind(this)} placeholder="Search for an artist" className="main-input form-control"/>
-            <div>
+            <div className="dropdown-wrapper">
               { dropdownmenu }
             </div>
           </div>
@@ -103,6 +117,7 @@ class Search extends Component{
           {/* {artistpic} */}
         </form>
       </div>
+    </div>
     );
   }
 }

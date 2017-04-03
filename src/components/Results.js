@@ -31,6 +31,11 @@ class Results extends Component{
         let albums = val.items;
         console.log('our entire list of choices: ',val);
         console.log('our list of albums: ',albums);
+        albums=albums.filter((val)=>{
+          if(val.album_type=="album"){
+            return val;
+          }
+        });
         albums = albums.map((val)=>{
           return(
             <a href="#" onClick={this.viewAlbum.bind(this)} ><li id={val.id}>{val.name}</li></a>
@@ -96,6 +101,11 @@ componentDidMount(){
       request.done((val)=>{
         let albums = val.items;
         console.log('our list of albums: ',albums);
+        albums=albums.filter((val)=>{
+          if(val.album_type=="album"){
+            return val;
+          }
+        });
         albums = albums.map((val)=>{
           return(
             <a href="#" onClick={this.viewAlbum.bind(this)} ><li id={val.id}>{val.name}</li></a>
@@ -127,12 +137,13 @@ componentDidMount(){
     this.refs.albumresults.innerHTML='';
   }
   render() {
+    let welcome_message = (!this.props.params.hasOwnProperty('id')) ? (<div className="welcome-message">Speed Browse Spotify and sample any track clip you want. Regards, Josh</div>) : '';
     let params = this.props.params;
     let albums = this.state.albums;
     let imageUrl = (this.state.imageUrl) ? this.state.imageUrl : '';
     console.log('render pic: ',imageUrl);
     let artist = (this.state.artist) ? this.state.artist : '';
-    let results_title = (this.state.displaying) ? (
+    let results_title = (this.props.params.id) ? (
       <h3> Albums by { artist }</h3>
     ) : '';
     if(!params.hasOwnProperty('name')){
@@ -141,6 +152,7 @@ componentDidMount(){
     let image = (this.props.params.id) ? <Image img={this.state.artist}/> : '';
     return (
       <div className="album-component">
+        { welcome_message }
         <div className="row">
           <div className="col-sm-6">
             {/* <Image img={artist}/> */}

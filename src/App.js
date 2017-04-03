@@ -13,32 +13,27 @@ class App extends Component {
       running:true
     }
   }
-  getPic(pic){
-    console.log('getting pic');
-    this.setState({
-      pic:pic
-    });
-  }
-  changeImage(){
-    this.setState({
-      pic:'hello world'
-    });
-  }
+  // fixResults(){
+  //   console.log('fixing');
+  //   let p = this.refs.children;
+  //   p.className += "absolute";
+  // }
   render() {
     let children = this.props.children;
     let pic = (this.state.pic) ? this.state.pic : '';
     console.log('pic in render: ',pic);
     return (
       <div className="App">
-        <Header />
+        {/* <Header /> */}
+
         <div>
-          <div className="row">
-            <div className="col-sm-12">
+          {/* <div className="row">
+            <div className="col-sm-12"> */}
               <Search />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-12">
+            {/* </div>
+          </div> */}
+          <div className="main-app row">
+            <div ref="children col-sm-12">
             { children }
             </div>
           </div>
